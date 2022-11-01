@@ -2,12 +2,12 @@ package com.cesar.user
 
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,6 +16,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
+import com.cesar.user.utils.cpfMask
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
@@ -29,6 +31,9 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
     lateinit var birth: TextInputEditText
     lateinit var gender: TextInputEditText
     lateinit var maritalState: Spinner
+    lateinit var cpf: TextInputEditText
+
+    var cpfAux = ""
 
     private val genderList = arrayOf("Masculino", "Feminino", "Outros")
     private val maritalStateList = arrayOf("Estado civil", "Solteira", "Casada", "Divorciada", "Viúva")
@@ -56,6 +61,7 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         gender = findViewById(R.id.register_gender)
         maritalState = findViewById(R.id.register_marital_status)
         emailContainer = findViewById(R.id.register_email_container)
+        cpf = findViewById(R.id.register_cpf)
 //        emailContainer.suffixText = "@gmail.com"
 
         pickDate()
@@ -63,6 +69,10 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
 //        openGalleryForImage()
 //        openCapturePhotoForImage()
         showChooseImageMethod()
+
+        cpf.addTextChangedListener {
+            cpfAux = it.toString().cpfMask(cpfAux, cpf)
+        }
 
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, maritalStateList)
         maritalState.adapter = arrayAdapter
@@ -84,6 +94,7 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         }
     }
 
+
     fun openCapturePhotoForImage() {
         img.setOnClickListener {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -101,13 +112,18 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
-            img.setImageURI(data?.data) // handle chosen image
+            if (intent?.data != null) {
+                img.setImageURI(intent.data) // handle chosen image
+            }
         }
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CAMERA && data != null){
-            img.setImageBitmap(data.extras?.get("data") as Bitmap)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CAMERA && intent != null){
+            if (intent.data != null) {
+                img.setImageBitmap(intent.extras?.get("data") as Bitmap)
+
+            }
         }
     }
 
@@ -168,5 +184,12 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         birth.setText("$savedDay-$savedMonth-$savedYear")
 
     }
+
+    //APLICAR NO OLHINHO
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+//        return super.onTouchEvent(event)
+//
+//        if (onKeyDown())
+//    }
 
 }
