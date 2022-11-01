@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:background="@drawable/login_bg">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/login_email_container"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="250dp">
+
+        <EditText
+            android:id="@+id/login_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/login_password_container"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Senha"
+        app:endIconMode="password_toggle"
+        app:layout_constraintTop_toBottomOf="@id/login_email_container"
+        app:layout_constraintStart_toStartOf="@id/login_email_container"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <CheckBox
+        android:id="@+id/login_checkbox_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lembrar senha"
+        app:layout_constraintStart_toStartOf="@id/login_password_container"
+        app:layout_constraintTop_toBottomOf="@id/login_password_container"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/login_btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ENTRAR"
+        app:layout_constraintTop_toBottomOf="@id/login_checkbox_password"
+        app:layout_constraintEnd_toEndOf="@id/login_password_container"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/login_btn_register"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="REGISTRAR"
+        app:layout_constraintTop_toBottomOf="@id/login_checkbox_password"
+        app:layout_constraintStart_toStartOf="@id/login_checkbox_password"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
