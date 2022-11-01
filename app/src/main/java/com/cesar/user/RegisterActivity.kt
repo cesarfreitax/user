@@ -1,13 +1,14 @@
 package com.cesar.user
 
 import android.app.Activity
+import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -17,6 +18,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
+import com.cesar.user.utils.OnDateSetListenerWithDateTreatmentImpl
 import com.cesar.user.utils.cpfMask
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -94,6 +96,14 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         }
     }
 
+    fun selectYearDate(datePickerListener: OnDateSetListenerWithDateTreatmentImpl, context: Context) {
+        val calendar: Calendar = Calendar.getInstance()
+        val year: Int = calendar.get(Calendar.YEAR)
+        val month: Int = calendar.get(Calendar.MONTH)
+        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+        DatePickerDialog(context, R.style.Theme_User, datePickerListener, year, month, day).show()
+    }
+
 
     fun openCapturePhotoForImage() {
         img.setOnClickListener {
@@ -169,9 +179,12 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
 
     private fun pickDate() {
         birth.setOnClickListener {
-            getDateTimeCalendar()
-
-            DatePickerDialog(this, this, year, month, day).show()
+            selectYearDate(OnDateSetListenerWithDateTreatmentImpl { date ->
+                birth.setText(date)
+            }, this)
+//            getDateTimeCalendar()
+//
+//            DatePickerDialog(this, this, year, month, day).show()
         }
     }
 
