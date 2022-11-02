@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
 //        password = findViewById(R.id.login_password)
 
         registerBtn.setOnClickListener {
-            val intent = Intent(this, MenuHamburguerActivity::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 

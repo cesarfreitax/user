@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import com.cesar.user.utils.OnDateSetListenerWithDateTreatmentImpl
 import com.cesar.user.utils.cpfMask
+import com.cesar.user.utils.phoneMask
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
@@ -34,8 +35,10 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
     lateinit var gender: TextInputEditText
     lateinit var maritalState: Spinner
     lateinit var cpf: TextInputEditText
+    lateinit var phone: TextInputEditText
 
-    var cpfAux = ""
+    private var cpfAux = ""
+    private var phoneAux = ""
 
     private val genderList = arrayOf("Masculino", "Feminino", "Outros")
     private val maritalStateList = arrayOf("Estado civil", "Solteira", "Casada", "Divorciada", "Viúva")
@@ -64,16 +67,18 @@ class RegisterActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         maritalState = findViewById(R.id.register_marital_status)
         emailContainer = findViewById(R.id.register_email_container)
         cpf = findViewById(R.id.register_cpf)
-//        emailContainer.suffixText = "@gmail.com"
+        phone = findViewById(R.id.register_phone)
 
         pickDate()
         showGenderListDialog()
-//        openGalleryForImage()
-//        openCapturePhotoForImage()
         showChooseImageMethod()
 
         cpf.addTextChangedListener {
             cpfAux = it.toString().cpfMask(cpfAux, cpf)
+        }
+
+        phone.addTextChangedListener {
+            phoneAux = it.toString().phoneMask(phoneAux, phone)
         }
 
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, maritalStateList)
