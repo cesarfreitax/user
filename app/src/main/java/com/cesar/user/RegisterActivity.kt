@@ -39,7 +39,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private var cpfAux = ""
     private var phoneAux = ""
-    private var formatDate = SimpleDateFormat("d MM Y", Locale.US)
+    private var formatDate = SimpleDateFormat("d/MM/Y", Locale.US)
 
     private val genderList = arrayOf("Masculino", "Feminino", "Outros")
     private val maritalStateList = arrayOf("Estado civil", "Solteira", "Casada", "Divorciada", "Viúva")
