@@ -11,4 +11,17 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string-array name="Nomes">
+        <item>César</item>
+        <item>Patricio</item>
+        <item>Bruno</item>
+        <item>Rafaella</item>
+        <item>Andrea</item>
+        <item>Caio</item>
+        <item>Julio</item>
+        <item>Hadonias</item>
+        <item>Matheus</item>
+        <item>Luana</item>
+    </string-array>
 </resources>

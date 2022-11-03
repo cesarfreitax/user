@@ -1,7 +1,10 @@
 package com.cesar.user.utils
 
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import com.cesar.user.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 fun String.cpfMask(cpfAux: String, editText: TextInputEditText) : String {
     var cpfMasked = this
@@ -69,3 +72,42 @@ fun String.phoneMask(phoneAux: String, editText: TextInputEditText) : String {
 
     return phoneMasked
 }
+
+fun String.nameMask (editText: AutoCompleteTextView) {
+    if (this.length < 3) {
+        editText.setTextColor(editText.resources.getColor(R.color.red))
+    } else {
+        editText.setTextColor(editText.resources.getColor(R.color.green))
+    }
+}
+
+fun String.emailMask (editText: EditText) {
+    if (this.length > 5) {
+        editText.setTextColor(editText.resources.getColor(R.color.green))
+    } else {
+        editText.setTextColor(editText.resources.getColor(R.color.red))
+    }
+}
+
+fun String.isLongEnough() = length >= 8
+fun String.hasEnoughDigits() = count(Char::isDigit) >= 3
+fun String.hasUpperCase() = any(Char::isUpperCase)
+fun String.hasSpecialChar() = any { it in "@#$%ˆˆ*()" }
+
+val requirements = listOf(String::isLongEnough, String::hasEnoughDigits, String::hasUpperCase, String::hasSpecialChar)
+val String.checkRequirements get() = requirements.all { check -> check(this) }
+
+fun String.passwordMask (editText: TextInputEditText) {
+    if (this.checkRequirements) {
+        editText.setTextColor(editText.resources.getColor(R.color.green))
+    } else {
+        editText.setTextColor(editText.resources.getColor(R.color.red))
+    }
+}
+
+fun String.notEmptyMask (editText: TextInputEditText) {
+    if (this.isNotEmpty()) {
+        editText.setTextColor(editText.resources.getColor(R.color.green))
+    }
+}
+

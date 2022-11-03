@@ -2,23 +2,17 @@ package com.cesar.user
 
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Context
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
-import com.cesar.user.utils.OnDateSetListenerWithDateTreatmentImpl
-import com.cesar.user.utils.cpfMask
-import com.cesar.user.utils.phoneMask
+import com.cesar.user.utils.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
@@ -30,58 +24,87 @@ private const val REQUEST_CODE_CAMERA = 1002
 class RegisterActivity : AppCompatActivity() {
 
     lateinit var img: ImageView
-    lateinit var emailContainer: TextInputLayout
+    lateinit var email: EditText
+    lateinit var password: TextInputEditText
     lateinit var birth: TextInputEditText
     lateinit var gender: TextInputEditText
     lateinit var maritalState: Spinner
     lateinit var cpf: TextInputEditText
     lateinit var phone: TextInputEditText
+    lateinit var name: AutoCompleteTextView
+    lateinit var availableHour: TextInputEditText
 
     private var cpfAux = ""
     private var phoneAux = ""
-    private var formatDate = SimpleDateFormat("d/MM/Y", Locale.US)
+    private var formatDate = SimpleDateFormat("dd/MM/y", Locale.US)
+    private var formatTime = SimpleDateFormat("HH:mm", Locale.US)
 
     private val genderList = arrayOf("Masculino", "Feminino", "Outros")
     private val maritalStateList = arrayOf("Estado civil", "Solteira", "Casada", "Divorciada", "Viúva")
-
-    var day = 0
-    var month = 0
-    var year = 0
-    var hour = 0
-    var minute = 0
-
-    var savedDay = 0
-    var savedMonth = 0
-    var savedYear = 0
-    var savedHour = 0
-    var savedMinute = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.register)
 
         setComponentBinding()
-//        pickDate()
         showGenderListDialog()
         showChooseImageMethod()
-        setCpfMask()
-        setPhoneMask()
+        setMasks()
         maritalStateAdapter()
+        setDatePickerDialog()
+        setTimePickerDialog()
 
-        birth.setOnClickListener(View.OnClickListener {
+        val names = resources.getStringArray(R.array.Nomes)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, names)
+        name.setAdapter(adapter)
+    }
+
+    private fun setTimePickerDialog() {
+        availableHour.setOnClickListener {
+            val getTime = Calendar.getInstance()
+            val timePicker = TimePickerDialog(
+                this,
+                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                { timePicker: TimePicker, hour: Int, minute: Int ->
+
+                    val selectTime = Calendar.getInstance()
+                    selectTime.set(Calendar.HOUR, hour-12)
+                    selectTime.set(Calendar.MINUTE, minute)
+
+                    availableHour.setText(formatTime.format(selectTime.time))
+
+                },
+                getTime.get(Calendar.HOUR),
+                getTime.get(Calendar.MINUTE),
+                true
+            )
+            timePicker.show()
+        }
+    }
+
+    // Set DatePickerDialog to capture user birth
+    private fun setDatePickerDialog() {
+        birth.setOnClickListener {
             val getDate = Calendar.getInstance()
-            val datepicker = DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            val datepicker = DatePickerDialog(
+                this,
+                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                { _, year, month, dayOfMonth ->
 
-                val selectDate = Calendar.getInstance()
-                selectDate.set(Calendar.YEAR, year)
-                selectDate.set(Calendar.MONTH, month)
-                selectDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    val selectDate = Calendar.getInstance()
+                    selectDate.set(Calendar.YEAR, year)
+                    selectDate.set(Calendar.MONTH, month)
+                    selectDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                birth.setText(formatDate.format(selectDate.time))
+                    birth.setText(formatDate.format(selectDate.time))
 
-            }, getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
+                },
+                getDate.get(Calendar.YEAR),
+                getDate.get(Calendar.MONTH),
+                getDate.get(Calendar.DAY_OF_MONTH)
+            )
             datepicker.show()
-        })
+        }
     }
 
     // Create adapter for spinner dropdown with an option list
@@ -111,39 +134,18 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    // Phone mask text listener for code formatting
-    private fun setPhoneMask() {
-        phone.addTextChangedListener {
-            phoneAux = it.toString().phoneMask(phoneAux, phone)
-        }
-    }
-
-    // CPF mask text listener for code formatting
-    private fun setCpfMask() {
-        cpf.addTextChangedListener {
-            cpfAux = it.toString().cpfMask(cpfAux, cpf)
-        }
-    }
-
-
     // Set binding according with the view
     private fun setComponentBinding() {
         img = findViewById(R.id.register_img)
         birth = findViewById(R.id.register_birth)
         gender = findViewById(R.id.register_gender)
         maritalState = findViewById(R.id.register_marital_status)
-        emailContainer = findViewById(R.id.register_email_container)
+        email = findViewById(R.id.register_email)
+        password = findViewById(R.id.register_password)
         cpf = findViewById(R.id.register_cpf)
         phone = findViewById(R.id.register_phone)
-    }
-
-    // Set the date variables according date now
-    fun selectYearDate(datePickerListener: OnDateSetListenerWithDateTreatmentImpl, context: Context) {
-        val calendar: Calendar = Calendar.getInstance()
-        val year: Int = calendar.get(Calendar.YEAR)
-        val month: Int = calendar.get(Calendar.MONTH)
-        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
-        DatePickerDialog(context, R.style.Theme_User, datePickerListener, year, month, day).show()
+        name = findViewById(R.id.register_name)
+        availableHour = findViewById(R.id.register_available_hour)
     }
 
     // Open the camera
@@ -166,6 +168,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // Check the requests and set the images
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
@@ -215,35 +218,36 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-//    // Open the calendar
-//    private fun getDateTimeCalendar() {
-//        val cal = Calendar.getInstance()
-//        day = cal.get(Calendar.DAY_OF_MONTH)
-//        month = cal.get(Calendar.MONTH)
-//        year = cal.get(Calendar.YEAR)
-//    }
+    // Set the masks for validations, formatting and visual
+    private fun setMasks() {
+        name.addTextChangedListener {
+            it.toString().nameMask(name)
+        }
 
-    // Set the chosen date
-//    private fun pickDate() {
-//        birth.setOnClickListener {
-//            selectYearDate(OnDateSetListenerWithDateTreatmentImpl { date ->
-//                birth.setText(date)
-//            }, this)
-////            getDateTimeCalendar()
-////
-////            DatePickerDialog(this, this, year, month, day).show()
-//        }
-//    }
+        email.addTextChangedListener {
+            it.toString().emailMask(email)
+        }
 
-//    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-//        savedDay = dayOfMonth
-//        savedMonth = month + 1
-//        savedYear = year
-//
-//        getDateTimeCalendar()
-//        birth.setText("$savedDay-$savedMonth-$savedYear")
-//
-//    }
+        password.addTextChangedListener {
+            it.toString().passwordMask(password)
+        }
+
+        birth.addTextChangedListener {
+            it.toString().notEmptyMask(birth)
+        }
+
+        gender.addTextChangedListener {
+            it.toString().notEmptyMask(gender)
+        }
+
+        phone.addTextChangedListener {
+            phoneAux = it.toString().phoneMask(phoneAux, phone)
+        }
+
+        cpf.addTextChangedListener {
+            cpfAux = it.toString().cpfMask(cpfAux, cpf)
+        }
+    }
 
     //APLICAR NO OLHINHO
 //    override fun onTouchEvent(event: MotionEvent?): Boolean {
