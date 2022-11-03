@@ -3,18 +3,25 @@ package com.cesar.user
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isNotEmpty
 import androidx.core.widget.addTextChangedListener
 import com.cesar.user.utils.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,9 +40,11 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var phone: TextInputEditText
     lateinit var name: AutoCompleteTextView
     lateinit var availableHour: TextInputEditText
+    lateinit var saveBtn: Button
 
     private var cpfAux = ""
     private var phoneAux = ""
+    private var finished = 0
     private var formatDate = SimpleDateFormat("dd/MM/y", Locale.US)
     private var formatTime = SimpleDateFormat("HH:mm", Locale.US)
 
@@ -54,6 +63,15 @@ class RegisterActivity : AppCompatActivity() {
         setDatePickerDialog()
         setTimePickerDialog()
 
+
+        saveBtn.setOnClickListener {
+            sharedPreferences()
+
+            val intent = Intent(this, MenuHamburguerActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         val names = resources.getStringArray(R.array.Nomes)
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, names)
         name.setAdapter(adapter)
@@ -65,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
             val timePicker = TimePickerDialog(
                 this,
                 android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                { timePicker: TimePicker, hour: Int, minute: Int ->
+                { _: TimePicker, hour: Int, minute: Int ->
 
                     val selectTime = Calendar.getInstance()
                     selectTime.set(Calendar.HOUR, hour-12)
@@ -107,11 +125,17 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun sharedPreferences() {
+        val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
+        sharedPref.edit().putString("nome", name.text.toString()).apply()
+    }
+
     // Create adapter for spinner dropdown with an option list
     private fun maritalStateAdapter() {
         val arrayAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, maritalStateList)
         maritalState.adapter = arrayAdapter
+
         maritalState.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -119,6 +143,14 @@ class RegisterActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
+
+                val text: TextView = parent?.getChildAt(0) as TextView
+
+                if (text.text != "Estado civil") {
+                    text.setTextColor(text.resources.getColor(R.color.green))
+                }
+
+
                 Toast.makeText(
                     applicationContext,
                     "Estado civil selecionado: ${maritalStateList[position]}",
@@ -146,6 +178,7 @@ class RegisterActivity : AppCompatActivity() {
         phone = findViewById(R.id.register_phone)
         name = findViewById(R.id.register_name)
         availableHour = findViewById(R.id.register_available_hour)
+        saveBtn = findViewById(R.id.register_save)
     }
 
     // Open the camera
@@ -168,12 +201,21 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // Check the requests and set the images
+    @RequiresApi(Build.VERSION_CODES.P)
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
             if (intent?.data != null) {
                 img.setImageURI(intent.data) // handle chosen image
+
+                val imageUri: Uri = intent.data!!
+                val source = ImageDecoder.createSource(contentResolver, imageUri)
+                val bitmap = ImageDecoder.decodeBitmap(source)
+                val file = File(filesDir, "foto.jpg")
+                file.outputStream().use {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+                }
             }
         }
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CAMERA && intent != null){
@@ -222,30 +264,56 @@ class RegisterActivity : AppCompatActivity() {
     private fun setMasks() {
         name.addTextChangedListener {
             it.toString().nameMask(name)
+            setSaveBtn()
         }
 
         email.addTextChangedListener {
             it.toString().emailMask(email)
+            setSaveBtn()
         }
 
         password.addTextChangedListener {
             it.toString().passwordMask(password)
+            setSaveBtn()
         }
 
         birth.addTextChangedListener {
             it.toString().notEmptyMask(birth)
+            setSaveBtn()
         }
 
         gender.addTextChangedListener {
             it.toString().notEmptyMask(gender)
-        }
-
-        phone.addTextChangedListener {
-            phoneAux = it.toString().phoneMask(phoneAux, phone)
+            setSaveBtn()
         }
 
         cpf.addTextChangedListener {
             cpfAux = it.toString().cpfMask(cpfAux, cpf)
+            setSaveBtn()
+        }
+
+        phone.addTextChangedListener {
+            phoneAux = it.toString().phoneMask(phoneAux, phone)
+            setSaveBtn()
+        }
+
+        availableHour.addTextChangedListener {
+            it.toString().notEmptyMask(availableHour)
+            setSaveBtn()
+        }
+
+    }
+
+    private fun setSaveBtn() {
+        if (name.text.length > 3 && email.text.length > 5 && password.text.toString().checkRequirements && birth.text.toString().isNotEmpty() && gender.text.toString().isNotEmpty() && maritalState.isNotEmpty() && cpf.text.toString().length == 14 && phone.text.toString().length == 15 && availableHour.text.toString().isNotEmpty()) {
+            saveBtn.backgroundTintList = getColorStateList(R.color.purple_500)
+            saveBtn.setTextColor(saveBtn.resources.getColor(R.color.white))
+            saveBtn.requestFocus()
+            saveBtn.isClickable = true
+        } else {
+            saveBtn.backgroundTintList = getColorStateList(R.color.white)
+            saveBtn.setTextColor(saveBtn.resources.getColor(R.color.black))
+            saveBtn.isClickable = false
         }
     }
 
