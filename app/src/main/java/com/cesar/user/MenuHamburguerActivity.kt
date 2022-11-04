@@ -28,6 +28,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
     private lateinit var passwordSharedPref: String
     private lateinit var genderSharedPref: String
     private lateinit var maritalStateSharedPref: String
+    private lateinit var maritalStateIndiceSharedPref: String
     private lateinit var phoneSharedPref: String
     private lateinit var cpfSharedPref: String
     private lateinit var birthSharedPref: String
@@ -46,6 +47,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
         passwordSharedPref = sharedPreferences.getString("password", "Senha nao encontrada!").toString()
         genderSharedPref = sharedPreferences.getString("gender", "Sexo nao encontrado!").toString()
         maritalStateSharedPref = sharedPreferences.getString("maritalState", "Estado civil nao encontrado!").toString()
+        maritalStateIndiceSharedPref = sharedPreferences.getString("maritalStateIndice", "Indice do Estado civil nao encontrado!").toString()
         phoneSharedPref = sharedPreferences.getString("phone", "Telefone nao encontrado!").toString()
         cpfSharedPref = sharedPreferences.getString("cpf", "CPF nao encontrado!").toString()
         birthSharedPref = sharedPreferences.getString("birth", "Data de nascimento nao encontrada!").toString()
@@ -101,6 +103,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 intent.putExtra("birth", birthSharedPref)
                 intent.putExtra("gender", genderSharedPref)
                 intent.putExtra("maritalState", maritalStateSharedPref)
+                intent.putExtra("maritalStateIndice", maritalStateIndiceSharedPref)
                 intent.putExtra("cpf", cpfSharedPref)
                 intent.putExtra("phone", phoneSharedPref)
                 intent.putExtra("name", nameSharedPref)

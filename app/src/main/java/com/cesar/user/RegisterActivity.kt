@@ -47,6 +47,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var birthExtra: String
     private lateinit var genderExtra: String
     private lateinit var maritalStateExtra: String
+    private lateinit var maritalStateIndiceExtra: String
     private lateinit var cpfExtra: String
     private lateinit var phoneExtra: String
     private lateinit var availableHourExtra: String
@@ -55,6 +56,7 @@ class RegisterActivity : AppCompatActivity() {
     private var cpfAux = ""
     private var phoneAux = ""
     private var maritalStateAux = ""
+    private var maritalStateAuxIndice = 0
     private var finished = 0
     private var formatDate = SimpleDateFormat("dd/MM/y", Locale.US)
     private var formatTime = SimpleDateFormat("HH:mm", Locale.US)
@@ -100,6 +102,7 @@ class RegisterActivity : AppCompatActivity() {
         birthExtra = intent?.getStringExtra("birth").toString()
         genderExtra = intent?.getStringExtra("gender").toString()
         maritalStateExtra = intent?.getStringExtra("maritalState").toString()
+        maritalStateIndiceExtra = intent?.getStringExtra("maritalStateIndice").toString()
         cpfExtra = intent?.getStringExtra("cpf").toString()
         phoneExtra = intent?.getStringExtra("phone").toString()
         availableHourExtra = intent?.getStringExtra("availableHour").toString()
@@ -126,6 +129,8 @@ class RegisterActivity : AppCompatActivity() {
             cpf.setText(cpfExtra)
             phone.setText(phoneExtra)
             availableHour.setText(availableHourExtra)
+            maritalStateList[0] = maritalStateExtra
+            maritalStateList[maritalStateIndiceExtra.toInt()] = "Estado civil"
         }
     }
 
@@ -185,6 +190,7 @@ class RegisterActivity : AppCompatActivity() {
         sharedPref.edit().putString("birth", birth.text.toString()).apply()
         sharedPref.edit().putString("gender", gender.text.toString()).apply()
         sharedPref.edit().putString("maritalState", maritalStateAux).apply()
+        sharedPref.edit().putString("maritalStateIndice", maritalStateAuxIndice.toString()).apply()
         sharedPref.edit().putString("cpf", cpf.text.toString()).apply()
         sharedPref.edit().putString("phone", phone.text.toString()).apply()
         sharedPref.edit().putString("availableHour", availableHour.text.toString()).apply()
@@ -208,6 +214,7 @@ class RegisterActivity : AppCompatActivity() {
                     text.setTextColor(text.resources.getColor(R.color.green))
                 }
                 maritalStateAux = maritalStateList[position]
+                maritalStateAuxIndice = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
