@@ -20,7 +20,6 @@ import androidx.core.view.isNotEmpty
 import androidx.core.widget.addTextChangedListener
 import com.cesar.user.utils.*
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,8 +41,20 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var availableHour: TextInputEditText
     lateinit var saveBtn: Button
 
+    private lateinit var nameExtra: String
+    private lateinit var emailExtra: String
+    private lateinit var passwordExtra: String
+    private lateinit var birthExtra: String
+    private lateinit var genderExtra: String
+    private lateinit var maritalStateExtra: String
+    private lateinit var cpfExtra: String
+    private lateinit var phoneExtra: String
+    private lateinit var availableHourExtra: String
+    private lateinit var listExtra: List<String>
+
     private var cpfAux = ""
     private var phoneAux = ""
+    private var maritalStateAux = ""
     private var finished = 0
     private var formatDate = SimpleDateFormat("dd/MM/y", Locale.US)
     private var formatTime = SimpleDateFormat("HH:mm", Locale.US)
@@ -54,7 +65,6 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.register)
-
         setComponentBinding()
         showGenderListDialog()
         showChooseImageMethod()
@@ -62,19 +72,61 @@ class RegisterActivity : AppCompatActivity() {
         maritalStateAdapter()
         setDatePickerDialog()
         setTimePickerDialog()
+        setGetStringExtra()
+        setUpdate()
+        setSaveBtn()
+        setNameSuggestionsAdapter()
+    }
 
-
+    private fun setSaveBtn() {
         saveBtn.setOnClickListener {
             sharedPreferences()
-
             val intent = Intent(this, MenuHamburguerActivity::class.java)
             startActivity(intent)
             finish()
         }
+    }
 
+    private fun setNameSuggestionsAdapter() {
         val names = resources.getStringArray(R.array.Nomes)
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, names)
         name.setAdapter(adapter)
+    }
+
+    private fun setGetStringExtra() {
+        nameExtra = intent?.getStringExtra("name").toString()
+        emailExtra = intent?.getStringExtra("email").toString()
+        passwordExtra = intent?.getStringExtra("password").toString()
+        birthExtra = intent?.getStringExtra("birth").toString()
+        genderExtra = intent?.getStringExtra("gender").toString()
+        maritalStateExtra = intent?.getStringExtra("maritalState").toString()
+        cpfExtra = intent?.getStringExtra("cpf").toString()
+        phoneExtra = intent?.getStringExtra("phone").toString()
+        availableHourExtra = intent?.getStringExtra("availableHour").toString()
+        listExtra = listOf(
+            nameExtra,
+            emailExtra,
+            passwordExtra,
+            birthExtra,
+            genderExtra,
+            cpfExtra,
+            phoneExtra,
+            availableHourExtra
+        )
+    }
+
+    private fun setUpdate() {
+        if (listExtra[0] != "null") {
+            name.setText(nameExtra)
+            email.setText(emailExtra)
+            password.setText(passwordExtra)
+            birth.setText(birthExtra)
+            gender.setText(genderExtra)
+            // MARITAL STATE
+            cpf.setText(cpfExtra)
+            phone.setText(phoneExtra)
+            availableHour.setText(availableHourExtra)
+        }
     }
 
     private fun setTimePickerDialog() {
@@ -127,7 +179,15 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun sharedPreferences() {
         val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
-        sharedPref.edit().putString("nome", name.text.toString()).apply()
+        sharedPref.edit().putString("name", name.text.toString()).apply()
+        sharedPref.edit().putString("email", email.text.toString()).apply()
+        sharedPref.edit().putString("password", password.text.toString()).apply()
+        sharedPref.edit().putString("birth", birth.text.toString()).apply()
+        sharedPref.edit().putString("gender", gender.text.toString()).apply()
+        sharedPref.edit().putString("maritalState", maritalStateAux).apply()
+        sharedPref.edit().putString("cpf", cpf.text.toString()).apply()
+        sharedPref.edit().putString("phone", phone.text.toString()).apply()
+        sharedPref.edit().putString("availableHour", availableHour.text.toString()).apply()
     }
 
     // Create adapter for spinner dropdown with an option list
@@ -143,20 +203,11 @@ class RegisterActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-
                 val text: TextView = parent?.getChildAt(0) as TextView
-
                 if (text.text != "Estado civil") {
                     text.setTextColor(text.resources.getColor(R.color.green))
                 }
-
-
-                Toast.makeText(
-                    applicationContext,
-                    "Estado civil selecionado: ${maritalStateList[position]}",
-                    Toast.LENGTH_SHORT
-                ).show()
-    //                teste = maritalStateList[position]
+                maritalStateAux = maritalStateList[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -264,51 +315,50 @@ class RegisterActivity : AppCompatActivity() {
     private fun setMasks() {
         name.addTextChangedListener {
             it.toString().nameMask(name)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         email.addTextChangedListener {
             it.toString().emailMask(email)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         password.addTextChangedListener {
             it.toString().passwordMask(password)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         birth.addTextChangedListener {
             it.toString().notEmptyMask(birth)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         gender.addTextChangedListener {
             it.toString().notEmptyMask(gender)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         cpf.addTextChangedListener {
             cpfAux = it.toString().cpfMask(cpfAux, cpf)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         phone.addTextChangedListener {
             phoneAux = it.toString().phoneMask(phoneAux, phone)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
         availableHour.addTextChangedListener {
             it.toString().notEmptyMask(availableHour)
-            setSaveBtn()
+            setSetBtnValidation()
         }
 
     }
 
-    private fun setSaveBtn() {
+    private fun setSetBtnValidation() {
         if (name.text.length > 3 && email.text.length > 5 && password.text.toString().checkRequirements && birth.text.toString().isNotEmpty() && gender.text.toString().isNotEmpty() && maritalState.isNotEmpty() && cpf.text.toString().length == 14 && phone.text.toString().length == 15 && availableHour.text.toString().isNotEmpty()) {
             saveBtn.backgroundTintList = getColorStateList(R.color.purple_500)
             saveBtn.setTextColor(saveBtn.resources.getColor(R.color.white))
-            saveBtn.requestFocus()
             saveBtn.isClickable = true
         } else {
             saveBtn.backgroundTintList = getColorStateList(R.color.white)
