@@ -82,7 +82,7 @@ fun String.nameMask (editText: AutoCompleteTextView) {
 }
 
 fun String.emailMask (editText: EditText) {
-    if (this.length > 5) {
+    if (this.length > 5 && !this.hasUpperCase()) {
         editText.setTextColor(editText.resources.getColor(R.color.green))
     } else {
         editText.setTextColor(editText.resources.getColor(R.color.red))

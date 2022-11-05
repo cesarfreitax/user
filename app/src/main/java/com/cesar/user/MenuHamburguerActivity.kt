@@ -22,6 +22,8 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
 
     private lateinit var binding: ActivityMenuHamburguerBinding
 
+    private lateinit var file: File
+
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var nameSharedPref: String
     private lateinit var emailSharedPref: String
@@ -70,9 +72,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
 
-        val file = File(filesDir, "foto.jpg")
-
-
+        file = File(filesDir, "foto.jpg")
 
         val header: LinearLayout = navView.getHeaderView(0) as LinearLayout
         val headerPerfilPhoto = header.findViewById<ImageView>(R.id.home_img)
@@ -98,6 +98,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
         if (item.itemId == R.id.update) {
             val intent = Intent(this, RegisterActivity::class.java)
             if (listSharedPref.isNotEmpty()) {
+                intent.putExtra("photo", file)
                 intent.putExtra("email", emailSharedPref)
                 intent.putExtra("password", passwordSharedPref)
                 intent.putExtra("birth", birthSharedPref)
@@ -109,9 +110,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 intent.putExtra("name", nameSharedPref)
                 intent.putExtra("availableHour", availableHourSharedPref)
             }
-
             startActivity(intent)
-            finish()
         }
 
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +42,7 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var availableHour: TextInputEditText
     lateinit var saveBtn: Button
 
+    private lateinit var photoExtra: File
     private lateinit var nameExtra: String
     private lateinit var emailExtra: String
     private lateinit var passwordExtra: String
@@ -96,6 +98,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setGetStringExtra() {
+        photoExtra = File(filesDir, "foto.jpg")
         nameExtra = intent?.getStringExtra("name").toString()
         emailExtra = intent?.getStringExtra("email").toString()
         passwordExtra = intent?.getStringExtra("password").toString()
@@ -120,6 +123,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setUpdate() {
         if (listExtra[0] != "null") {
+            img.setImageDrawable(Drawable.createFromPath(photoExtra.toString()))
             name.setText(nameExtra)
             email.setText(emailExtra)
             password.setText(passwordExtra)
@@ -363,7 +367,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setSetBtnValidation() {
-        if (name.text.length > 3 && email.text.length > 5 && password.text.toString().checkRequirements && birth.text.toString().isNotEmpty() && gender.text.toString().isNotEmpty() && maritalState.isNotEmpty() && cpf.text.toString().length == 14 && phone.text.toString().length == 15 && availableHour.text.toString().isNotEmpty()) {
+        if (name.text.length > 3 && email.text.length > 5 && !email.text.any(Char::isUpperCase) && password.text.toString().checkRequirements && birth.text.toString().isNotEmpty() && gender.text.toString().isNotEmpty() && maritalState.isNotEmpty() && cpf.text.toString().length == 14 && phone.text.toString().length == 15 && availableHour.text.toString().isNotEmpty()) {
             saveBtn.backgroundTintList = getColorStateList(R.color.purple_500)
             saveBtn.setTextColor(saveBtn.resources.getColor(R.color.white))
             saveBtn.isClickable = true
