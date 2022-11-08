@@ -8,9 +8,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home" translatable="false">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="email">Email</string>
+    <string name="imagem_tela_inicial">Imagem tela inicial</string>
 
     <string-array name="Nomes">
         <item>César</item>

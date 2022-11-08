@@ -38,24 +38,6 @@
                 android:contentDescription="Imagem de perfil" />
         </androidx.cardview.widget.CardView>
 
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/register_name"-->
-<!--            android:layout_width="300dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Nome"-->
-<!--            android:textColorHint="@color/black"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/register_img_container"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            android:layout_marginTop="8dp">-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/register_name"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:inputType="text" />-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
-
         <AutoCompleteTextView
             android:layout_width="300dp"
             android:layout_height="55dp"
@@ -191,6 +173,24 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_available_hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:focusable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/register_treatment_container"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Como podemos lhe chamar?"
+            android:textColorHint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/register_available_hour_container"
+            app:layout_constraintStart_toStartOf="@id/register_available_hour_container">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_treatment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="time"

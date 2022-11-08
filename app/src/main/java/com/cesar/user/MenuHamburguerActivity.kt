@@ -36,6 +36,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
     private lateinit var birthSharedPref: String
     private lateinit var availableHourSharedPref: String
     private lateinit var listSharedPref: List<String>
+    private lateinit var treatmentSharedPref: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,8 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
         cpfSharedPref = sharedPreferences.getString("cpf", "CPF nao encontrado!").toString()
         birthSharedPref = sharedPreferences.getString("birth", "Data de nascimento nao encontrada!").toString()
         availableHourSharedPref = sharedPreferences.getString("availableHour", "Hora disponível nao encontrada!").toString()
-        listSharedPref = listOf(nameSharedPref, emailSharedPref, passwordSharedPref, genderSharedPref, maritalStateSharedPref, phoneSharedPref, cpfSharedPref, birthSharedPref, availableHourSharedPref)
+        treatmentSharedPref = sharedPreferences.getString("treatment", "Tratamento nao encontrado.").toString()
+        listSharedPref = listOf(nameSharedPref, emailSharedPref, passwordSharedPref, genderSharedPref, maritalStateSharedPref, phoneSharedPref, cpfSharedPref, birthSharedPref, availableHourSharedPref, treatmentSharedPref)
 
         setSupportActionBar(binding.appBarMenuHamburguer.toolbar)
 
@@ -78,7 +80,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
         val headerPerfilPhoto = header.findViewById<ImageView>(R.id.home_img)
         headerPerfilPhoto.setImageDrawable(Drawable.createFromPath(file.toString()))
         val headerName = header.findViewById<TextView>(R.id.home_name)
-        headerName.text = nameSharedPref
+        headerName.text = "$treatmentSharedPref, $nameSharedPref"
         val headerEmail = header.findViewById<TextView>(R.id.home_email)
         headerEmail.text = "${emailSharedPref}@gmail.com"
     }
@@ -109,6 +111,7 @@ class MenuHamburguerActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 intent.putExtra("phone", phoneSharedPref)
                 intent.putExtra("name", nameSharedPref)
                 intent.putExtra("availableHour", availableHourSharedPref)
+                intent.putExtra("treatment", treatmentSharedPref)
             }
             startActivity(intent)
         }

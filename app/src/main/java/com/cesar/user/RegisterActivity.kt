@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isNotEmpty
 import androidx.core.widget.addTextChangedListener
 import com.cesar.user.utils.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.text.SimpleDateFormat
@@ -41,6 +43,8 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var name: AutoCompleteTextView
     lateinit var availableHour: TextInputEditText
     lateinit var saveBtn: Button
+    lateinit var treatment: TextInputEditText
+    private lateinit var bottomSheet: TextInputEditText
 
     private lateinit var photoExtra: File
     private lateinit var nameExtra: String
@@ -54,14 +58,15 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var phoneExtra: String
     private lateinit var availableHourExtra: String
     private lateinit var listExtra: List<String>
+    private lateinit var treatmentExtra: String
 
     private var cpfAux = ""
     private var phoneAux = ""
     private var maritalStateAux = ""
     private var maritalStateAuxIndice = 0
+    private var treatmentAux = ""
     private var finished = 0
     private var formatDate = SimpleDateFormat("dd/MM/y", Locale.US)
-    private var formatTime = SimpleDateFormat("HH:mm", Locale.US)
 
     private val genderList = arrayOf("Masculino", "Feminino", "Outros")
     private val maritalStateList = arrayOf("Estado civil", "Solteira", "Casada", "Divorciada", "Viúva")
@@ -80,6 +85,31 @@ class RegisterActivity : AppCompatActivity() {
         setUpdate()
         setSaveBtn()
         setNameSuggestionsAdapter()
+
+        bottomSheet.setOnClickListener {
+            treatment.setText("")
+            val bottomSheetDialog = BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_Light_BottomSheetDialog)
+            val bottomSheetView = LayoutInflater.from(applicationContext).inflate(
+                R.layout.bottomsheet_treatment,
+                findViewById<LinearLayout>(R.id.bottomsheet)
+            )
+
+            val radiogroup = bottomSheetView.findViewById<RadioGroup>(R.id.radiogroup)
+
+
+
+
+            bottomSheetDialog.setContentView(bottomSheetView)
+            bottomSheetDialog.show()
+
+            radiogroup.setOnCheckedChangeListener { _, _ ->
+                treatmentAux = radiogroup.findViewById<RadioButton>(radiogroup.checkedRadioButtonId).text.toString()
+                treatment.setText(treatmentAux)
+                bottomSheetDialog.dismiss()
+            }
+
+        }
+
     }
 
     private fun setSaveBtn() {
@@ -109,6 +139,7 @@ class RegisterActivity : AppCompatActivity() {
         cpfExtra = intent?.getStringExtra("cpf").toString()
         phoneExtra = intent?.getStringExtra("phone").toString()
         availableHourExtra = intent?.getStringExtra("availableHour").toString()
+        treatmentExtra = intent?.getStringExtra("treatment").toString()
         listExtra = listOf(
             nameExtra,
             emailExtra,
@@ -117,7 +148,8 @@ class RegisterActivity : AppCompatActivity() {
             genderExtra,
             cpfExtra,
             phoneExtra,
-            availableHourExtra
+            availableHourExtra,
+            treatmentExtra
         )
     }
 
@@ -133,8 +165,10 @@ class RegisterActivity : AppCompatActivity() {
             cpf.setText(cpfExtra)
             phone.setText(phoneExtra)
             availableHour.setText(availableHourExtra)
-            maritalStateList[0] = maritalStateExtra
-            maritalStateList[maritalStateIndiceExtra.toInt()] = "Estado civil"
+//            maritalStateList[0] = maritalStateExtra
+//            maritalStateList[maritalStateIndiceExtra.toInt()] = "Estado civil"
+            maritalState.setSelection(maritalStateIndiceExtra.toInt())
+            treatment.setText(treatmentExtra)
         }
     }
 
@@ -145,13 +179,9 @@ class RegisterActivity : AppCompatActivity() {
                 this,
                 android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                 { _: TimePicker, hour: Int, minute: Int ->
-
-                    val selectTime = Calendar.getInstance()
-                    selectTime.set(Calendar.HOUR, hour-12)
-                    selectTime.set(Calendar.MINUTE, minute)
-
-                    availableHour.setText(formatTime.format(selectTime.time))
-
+                    val minuteFormatted: String = if (minute < 10) "0${minute}" else minute.toString()
+                    val hourFormatted: String = if (hour < 10) "0${hour}" else hour.toString()
+                    availableHour.setText("$hourFormatted:$minuteFormatted")
                 },
                 getTime.get(Calendar.HOUR),
                 getTime.get(Calendar.MINUTE),
@@ -198,6 +228,7 @@ class RegisterActivity : AppCompatActivity() {
         sharedPref.edit().putString("cpf", cpf.text.toString()).apply()
         sharedPref.edit().putString("phone", phone.text.toString()).apply()
         sharedPref.edit().putString("availableHour", availableHour.text.toString()).apply()
+        sharedPref.edit().putString("treatment", treatmentAux).apply()
     }
 
     // Create adapter for spinner dropdown with an option list
@@ -241,6 +272,8 @@ class RegisterActivity : AppCompatActivity() {
         name = findViewById(R.id.register_name)
         availableHour = findViewById(R.id.register_available_hour)
         saveBtn = findViewById(R.id.register_save)
+        bottomSheet = findViewById(R.id.register_treatment)
+        treatment = findViewById(R.id.register_treatment)
     }
 
     // Open the camera
