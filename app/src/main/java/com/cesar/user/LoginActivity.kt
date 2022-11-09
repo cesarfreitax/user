@@ -23,14 +23,18 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Thread.sleep(5000)
-        val splashScreen = installSplashScreen()
+        delaySplashScreen()
+        installSplashScreen()
         setContentView(binding.root)
 
         checkRememberLogin()
         setupButton()
         setShowPwdBtn()
 
+    }
+
+    private fun delaySplashScreen() {
+        Thread.sleep(5000)
     }
 
     private fun setShowPwdBtn() {
@@ -42,9 +46,10 @@ class LoginActivity : AppCompatActivity() {
     private fun showOrHidePassword(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> binding.loginPassword.inputType =
-                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            MotionEvent.ACTION_UP -> binding.loginPassword.inputType =
-                InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+                InputType.TYPE_CLASS_TEXT
+            MotionEvent.ACTION_UP -> {
+                binding.loginPassword.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+            }
         }
         return true
     }

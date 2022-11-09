@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="cartões"
+        android:id="@+id/cards"
+        android:icon="@drawable/ic_credit_card"/>
+
+    <item android:title="vantagens"
+        android:id="@+id/advantages"
+        android:icon="@drawable/ic_advantages"/>
+
+    <item android:title="mais"
+        android:id="@+id/more"
+        android:icon="@drawable/ic_more"/>
+
+</menu>

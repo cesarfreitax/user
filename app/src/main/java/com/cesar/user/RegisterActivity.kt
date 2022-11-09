@@ -96,9 +96,6 @@ class RegisterActivity : AppCompatActivity() {
 
             val radiogroup = bottomSheetView.findViewById<RadioGroup>(R.id.radiogroup)
 
-
-
-
             bottomSheetDialog.setContentView(bottomSheetView)
             bottomSheetDialog.show()
 
