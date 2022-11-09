@@ -1,15 +1,20 @@
 package com.cesar.user
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
+import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.cesar.user.databinding.LoginBinding
 
+@SuppressLint("ClickableViewAccessibility")
 class LoginActivity : AppCompatActivity() {
 
     private val binding by lazy { LoginBinding.inflate(layoutInflater) }
@@ -24,6 +29,24 @@ class LoginActivity : AppCompatActivity() {
 
         checkRememberLogin()
         setupButton()
+        setShowPwdBtn()
+
+    }
+
+    private fun setShowPwdBtn() {
+        binding.loginBtnShowPwd.setOnTouchListener { _, event ->
+            return@setOnTouchListener showOrHidePassword(event)
+        }
+    }
+
+    private fun showOrHidePassword(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> binding.loginPassword.inputType =
+                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            MotionEvent.ACTION_UP -> binding.loginPassword.inputType =
+                InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+        }
+        return true
     }
 
     private fun setupButton() {

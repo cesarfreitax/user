@@ -397,6 +397,11 @@ class RegisterActivity : AppCompatActivity() {
             setSetBtnValidation()
         }
 
+        treatment.addTextChangedListener {
+            it.toString().notEmptyMask(treatment)
+            setSetBtnValidation()
+        }
+
     }
 
     private fun setSetBtnValidation() {
