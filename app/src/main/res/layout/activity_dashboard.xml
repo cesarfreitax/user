@@ -6,24 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".DashboardActivity">
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/dashboard_bottom_nav">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/dashboard_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-
-
+    <include
+        android:id="@+id/home"
+        layout="@layout/layout_home"
+        tools:visibility="visible" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/dashboard_bottom_nav"
@@ -36,4 +22,5 @@
         app:menu="@menu/bottom_nav_bar">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

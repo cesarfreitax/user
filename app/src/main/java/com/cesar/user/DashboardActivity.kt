@@ -2,37 +2,54 @@ package com.cesar.user
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cesar.user.databinding.ActivityDashboardBinding
 
 class DashboardActivity : AppCompatActivity() {
 
-    private val binding by lazy {
-        ActivityDashboardBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityDashboardBinding.inflate(layoutInflater) }
+    private var imagesList = mutableListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setFullScreen()
+        postToList()
+        setAdapter()
+        setADRecyclerViewAnimation()
 
-        replaceFragment(CardsFragment())
 
-        binding.dashboardBottomNav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.cards -> replaceFragment(CardsFragment())
-                R.id.advantages -> replaceFragment(AdvantagesFragment())
-                R.id.more -> replaceFragment(MoreFragment())
+    }
 
-                else -> { }
-            }
-            true
+    private fun setFullScreen() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+    }
+
+    private fun setADRecyclerViewAnimation() {
+        binding.home.cardsRecyclerview.addItemDecoration(HorizontalItemDecoration())
+        PageItemSnapHelper().attachToRecyclerView(binding.home.cardsRecyclerview)
+    }
+
+    private fun setAdapter() {
+        binding.home.cardsRecyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val adapter = ADCardAdapter(imagesList)
+        binding.home.cardsRecyclerview.adapter = adapter
+    }
+
+    private fun addtoList(image: Int) {
+        imagesList.add(image)
+    }
+
+    private fun postToList() {
+        for (i in 1..5) {
+            addtoList(R.drawable.anuncio_1)
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.dashboard_container, fragment)
-        fragmentTransaction.commit()
-    }
 }

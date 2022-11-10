@@ -1,12 +1,20 @@
 package com.cesar.user.utils
 
+import android.content.res.Resources
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import com.cesar.user.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
+val Int.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+
+val Float.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+
 fun String.cpfMask(cpfAux: String, editText: TextInputEditText) : String {
+
     var cpfMasked = this
 
     if (this.length == 3 && cpfAux.length <= this.length) {
@@ -109,5 +117,6 @@ fun String.notEmptyMask (editText: TextInputEditText) {
     if (this.isNotEmpty()) {
         editText.setTextColor(editText.resources.getColor(R.color.green))
     }
+
 }
 

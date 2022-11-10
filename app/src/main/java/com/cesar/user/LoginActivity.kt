@@ -112,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun nagivationToHome() {
-        val intent = Intent(this, MenuHamburguerActivity::class.java)
+        val intent = Intent(this, DashboardActivity::class.java)
         Toast.makeText(applicationContext, "Login efetuado com sucesso!", Toast.LENGTH_SHORT).show()
         startActivity(intent)
     }
