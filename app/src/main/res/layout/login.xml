@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@drawable/login_bg">
+    android:background="@drawable/cards_gradient_background">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/login_email_container"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/emaill"
         app:suffixText="\@gmail.com"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,9 @@
             android:id="@+id/login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -31,7 +33,7 @@
         android:id="@+id/login_password_container"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Senha"
+        android:hint="@string/senha"
         app:endIconMode="password_toggle"
         app:layout_constraintTop_toBottomOf="@id/login_email_container"
         app:layout_constraintStart_toStartOf="@id/login_email_container"
@@ -45,46 +47,50 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/login_btn_show_pwd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mostrar senha"
-        android:scaleX=".7"
-        android:scaleY=".7"
-        app:layout_constraintTop_toBottomOf="@id/login_password_container"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="46dp"
-        android:backgroundTint="#DDDDDD"/>
+<!--    <Button-->
+<!--        android:id="@+id/login_btn_show_pwd"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Mostrar senha"-->
+<!--        android:scaleX=".7"-->
+<!--        android:scaleY=".7"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/login_password_container"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:layout_marginStart="46dp"-->
+<!--        android:backgroundTint="#DDDDDD"/>-->
 
 
     <CheckBox
         android:id="@+id/login_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lembrar senha"
+        android:text="@string/lembrar_senha"
+        android:buttonTint="@color/black"
         app:layout_constraintStart_toStartOf="@id/login_password_container"
-        app:layout_constraintTop_toBottomOf="@id/login_btn_show_pwd"
-        android:layout_marginTop="8dp"/>
-
-    <Button
-        android:id="@+id/login_btn_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ENTRAR"
-        app:layout_constraintTop_toBottomOf="@id/login_checkbox"
-        app:layout_constraintEnd_toEndOf="@id/login_password_container"
+        app:layout_constraintTop_toBottomOf="@id/login_password_container"
         android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/login_btn_register"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="REGISTRAR"
+        android:layout_width="100dp"
+        android:text="@string/registrar"
         app:layout_constraintTop_toBottomOf="@id/login_checkbox"
         app:layout_constraintStart_toStartOf="@id/login_checkbox"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/border_button"
         android:textColor="@color/black"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/login_btn_submit"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/entrar"
+        android:background="@drawable/button"
+        android:textColor="#60FFA8"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/login_checkbox"
+        app:layout_constraintEnd_toEndOf="@id/login_password_container"
         android:layout_marginTop="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

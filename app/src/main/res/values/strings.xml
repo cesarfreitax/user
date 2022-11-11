@@ -1,18 +1,56 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">user</string>
-    <string name="title_activity_menu_hamburguer">MenuHamburguerActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_menu_hamburguer" tools:ignore="MissingTranslation">MenuHamburguerActivity</string>
+    <string name="navigation_drawer_open" tools:ignore="MissingTranslation">Open navigation drawer</string>
+    <string name="navigation_drawer_close" tools:ignore="MissingTranslation">Close navigation drawer</string>
+    <string name="nav_header_title" tools:ignore="MissingTranslation">Android Studio</string>
+    <string name="nav_header_subtitle" tools:ignore="MissingTranslation">android.studio@android.com</string>
+    <string name="nav_header_desc" tools:ignore="MissingTranslation">Navigation header</string>
+    <string name="action_settings" tools:ignore="MissingTranslation">Settings</string>
 
     <string name="menu_home" translatable="false">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="email">Email</string>
-    <string name="imagem_tela_inicial">Imagem tela inicial</string>
+    <string name="menu_gallery" tools:ignore="MissingTranslation">Gallery</string>
+    <string name="menu_slideshow" tools:ignore="MissingTranslation">Slideshow</string>
+    <string name="email" tools:ignore="MissingTranslation">Email</string>
+    <string name="imagem_tela_inicial" tools:ignore="MissingTranslation">Imagem tela inicial</string>
+    <string name="imagem_da_logo" tools:ignore="MissingTranslation">Imagem da logo</string>
+    <string name="mostrar_ou_esconder_o_saldo" tools:ignore="MissingTranslation">Mostrar ou esconder o saldo</string>
+    <string name="ver_extrato" tools:ignore="MissingTranslation">Ver extrato</string>
+    <string name="quantidade_de_cart_es" tools:ignore="MissingTranslation">Quantidade de cartões</string>
+    <string name="extrato" tools:ignore="MissingTranslation">Extrato</string>
+    <string name="extrato_ndetalhado" tools:ignore="MissingTranslation">Extrato\ndetalhado</string>
+    <string name="lugares_que_aceitam_o_cart_o" tools:ignore="MissingTranslation">Lugares que aceitam o cartão</string>
+    <string name="onde_naceita" tools:ignore="MissingTranslation">Onde\naceita</string>
+    <string name="gasto_di_rio_recomendado" tools:ignore="MissingTranslation">Gasto diário recomendado</string>
+    <string name="gasto_ndi_rio" tools:ignore="MissingTranslation">Gasto\ndiário</string>
+    <string name="promo_es" tools:ignore="MissingTranslation">Promoções</string>
+    <string name="promo" tools:ignore="MissingTranslation">Promoções</string>
+    <string name="alterar_senha" tools:ignore="MissingTranslation">Alterar senha</string>
+    <string name="trocar_nsenha" tools:ignore="MissingTranslation">Trocar\nsenha</string>
+    <string name="bloquear_o_cart_o" tools:ignore="MissingTranslation">Bloquear o cartão</string>
+    <string name="bloquear" tools:ignore="MissingTranslation">Bloquear</string>
+    <string name="pedir_outro_cart_o" tools:ignore="MissingTranslation">Pedir outro cartão</string>
+    <string name="pedir_n2_via" tools:ignore="MissingTranslation">Pedir\n2ª via</string>
+    <string name="alterar_apelido_do_cart_o" tools:ignore="MissingTranslation">Alterar apelido do cartão</string>
+    <string name="alterar_napelido" tools:ignore="MissingTranslation">Alterar\napelido</string>
+    <string name="remover_um_cart_o" tools:ignore="MissingTranslation">Remover um cartão</string>
+    <string name="excluir_ncart_o" tools:ignore="MissingTranslation">Excluir\ncartão</string>
+    <string name="adicionar_um_cart_o" tools:ignore="MissingTranslation">Adicionar um cartão</string>
+    <string name="adicionar_ncart_o" tools:ignore="MissingTranslation">Adicionar\ncartão</string>
+    <string name="emaill" tools:ignore="MissingTranslation">Email</string>
+    <string name="senha" tools:ignore="MissingTranslation">Senha</string>
+    <string name="lembrar_senha" tools:ignore="MissingTranslation">Lembrar senha</string>
+    <string name="registrar" tools:ignore="MissingTranslation">registrar</string>
+    <string name="entrar" tools:ignore="MissingTranslation">entrar</string>
+    <string name="imagem_de_perfil" tools:ignore="MissingTranslation">Imagem de perfil</string>
+    <string name="nome" tools:ignore="MissingTranslation">Nome</string>
+    <string name="data_de_nascimento" tools:ignore="MissingTranslation">Data de nascimento</string>
+    <string name="g_nero" tools:ignore="MissingTranslation">Gênero</string>
+    <string name="cpf" tools:ignore="MissingTranslation">CPF</string>
+    <string name="celular" tools:ignore="MissingTranslation">Celular</string>
+    <string name="hor_rio_dispon_vel" tools:ignore="MissingTranslation">Horário disponível</string>
+    <string name="como_podemos_lhe_chamar" tools:ignore="MissingTranslation">Como podemos lhe chamar?</string>
+    <string name="salvar" tools:ignore="MissingTranslation">SALVAR</string>
 
     <string-array name="Nomes">
         <item>César</item>

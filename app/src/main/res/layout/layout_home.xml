@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DashboardActivity">
+    tools:context=".DashboardActivity"
+    android:id="@+id/home_layout">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/cards_recyclerview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,23 +27,25 @@
                 android:background="@drawable/cards_gradient_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingBottom="8dp">
 
                 <ImageView
                     android:id="@+id/cards_img"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/user_logo_transparent"
+                    android:src="@drawable/user_logo_black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@string/imagem_da_logo" />
 
                 <TextView
                     android:id="@+id/cards_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:text="R$ 6,12"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -53,9 +55,9 @@
                     android:id="@+id/cards_show_hide_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginStart="60dp"
                     android:layout_marginTop="10dp"
-                    android:contentDescription="Mostrar ou esconder o saldo"
+                    android:contentDescription="@string/mostrar_ou_esconder_o_saldo"
                     android:src="@drawable/ic_action_password"
                     app:layout_constraintStart_toEndOf="@id/cards_balance"
                     app:layout_constraintTop_toBottomOf="@id/cards_img" />
@@ -66,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Final 7222 - Ativo"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/cards_balance"
                     app:layout_constraintTop_toBottomOf="@id/cards_balance" />
@@ -76,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="César"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="@id/cards_card_number"
                     app:layout_constraintTop_toBottomOf="@id/cards_card_number" />
 
@@ -84,32 +86,31 @@
                     android:id="@+id/cards_button_resume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/border_button"
                     android:paddingHorizontal="20dp"
-                    android:text="Ver extrato"
+                    android:text="@string/ver_extrato"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cards_balance"
-                    app:strokeColor="@color/white" />
+                    app:layout_constraintTop_toBottomOf="@id/cards_balance" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="."
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_circle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cards_card_name" />
+                    app:layout_constraintTop_toBottomOf="@id/cards_card_name"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/quantidade_de_cart_es" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+                android:layout_marginTop="16dp"
                 android:id="@+id/cards_ic_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,7 +118,8 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cards_container">
+                app:layout_constraintTop_toBottomOf="@id/cards_container"
+                android:baselineAligned="false">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -139,14 +141,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_resume" />
+                            android:src="@drawable/ic_resume"
+                            android:contentDescription="@string/extrato" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_resume_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Extrato\ndetalhado"
+                        android:text="@string/extrato_ndetalhado"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_resume"
@@ -176,14 +179,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_places" />
+                            android:src="@drawable/ic_places"
+                            android:contentDescription="@string/lugares_que_aceitam_o_cart_o" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_place_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Onde\naceita"
+                        android:text="@string/onde_naceita"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_place"
@@ -213,14 +217,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_daily_expense" />
+                            android:src="@drawable/ic_daily_expense"
+                            android:contentDescription="@string/gasto_di_rio_recomendado" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_daily_expense_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gasto\ndiário"
+                        android:text="@string/gasto_ndi_rio"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_daily_expense"
@@ -249,14 +254,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_promo" />
+                            android:src="@drawable/ic_promo"
+                            android:contentDescription="@string/promo_es" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_promo_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Promoções"
+                        android:text="@string/promo"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_promo"
@@ -286,14 +292,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_change_password" />
+                            android:src="@drawable/ic_change_password"
+                            android:contentDescription="@string/alterar_senha" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_change_password_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trocar\nsenha"
+                        android:text="@string/trocar_nsenha"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_change_password"
@@ -308,7 +315,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:baselineAligned="false">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -330,14 +338,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_lock" />
+                            android:src="@drawable/ic_lock"
+                            android:contentDescription="@string/bloquear_o_cart_o" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_block_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bloquear"
+                        android:text="@string/bloquear"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_block"
@@ -367,14 +376,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_another_card" />
+                            android:src="@drawable/ic_another_card"
+                            android:contentDescription="@string/pedir_outro_cart_o" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_second_card_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pedir\n2ª via"
+                        android:text="@string/pedir_n2_via"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_second_card"
@@ -404,14 +414,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_rename" />
+                            android:src="@drawable/ic_rename"
+                            android:contentDescription="@string/alterar_apelido_do_cart_o" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_rename_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Alterar\napelido"
+                        android:text="@string/alterar_napelido"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_rename"
@@ -441,14 +452,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_remove" />
+                            android:src="@drawable/ic_remove"
+                            android:contentDescription="@string/remover_um_cart_o" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_remove_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Excluir\ncartão"
+                        android:text="@string/excluir_ncart_o"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_remove"
@@ -478,14 +490,15 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
+                            android:src="@drawable/ic_add"
+                            android:contentDescription="@string/adicionar_um_cart_o" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:id="@+id/cards_ic_add_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Adicionar\ncartão"
+                        android:text="@string/adicionar_ncart_o"
                         android:textAlignment="center"
                         android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="@id/cards_ic_add"
@@ -497,6 +510,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="16dp"
                 android:id="@+id/cards_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

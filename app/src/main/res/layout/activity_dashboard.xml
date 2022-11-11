@@ -8,8 +8,17 @@
 
     <include
         android:id="@+id/home"
-        layout="@layout/layout_home"
-        tools:visibility="visible" />
+        layout="@layout/layout_home" />
+
+    <include
+        android:id="@+id/advantages"
+        layout="@layout/layout_advantages"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/more"
+        layout="@layout/layout_more"
+        android:visibility="gone"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/dashboard_bottom_nav"

@@ -2,11 +2,13 @@ package com.cesar.user
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
-import androidx.fragment.app.Fragment
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cesar.user.databinding.ActivityDashboardBinding
 
+@Suppress("DEPRECATION")
 class DashboardActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityDashboardBinding.inflate(layoutInflater) }
@@ -20,7 +22,20 @@ class DashboardActivity : AppCompatActivity() {
         setAdapter()
         setADRecyclerViewAnimation()
 
+        binding.dashboardBottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.cards -> show(binding.more.moreLayout, binding.advantages.advantagesLayout, binding.home.homeLayout)
+                R.id.advantages -> show(binding.home.homeLayout, binding.more.moreLayout, binding.advantages.advantagesLayout)
+                R.id.more -> show(binding.home.homeLayout, binding.advantages.advantagesLayout, binding.more.moreLayout)
+            }
+            true
+        }
+    }
 
+    private fun show(viewGone1: ConstraintLayout, viewGone2: ConstraintLayout, viewVisible: ConstraintLayout) {
+        viewGone1.visibility = View.GONE
+        viewGone2.visibility = View.GONE
+        viewVisible.visibility = View.VISIBLE
     }
 
     private fun setFullScreen() {
