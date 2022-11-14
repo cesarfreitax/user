@@ -5,12 +5,8 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import com.cesar.user.R
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 val Int.dp: Int
-    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
-
-val Float.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
 fun String.cpfMask(cpfAux: String, editText: TextInputEditText) : String {
@@ -34,9 +30,9 @@ fun String.cpfMask(cpfAux: String, editText: TextInputEditText) : String {
         editText.setText(cpfMasked)
     }
     if (this.length < 14) {
-        editText.setTextColor(editText.resources.getColor(R.color.red))
+        setTextColor(editText, R.color.red)
     } else {
-        editText.setTextColor(editText.resources.getColor(R.color.green))
+        setTextColor(editText, R.color.black)
     }
 
     editText.setSelection(editText.length())
@@ -71,9 +67,9 @@ fun String.phoneMask(phoneAux: String, editText: TextInputEditText) : String {
         editText.setText(phoneMasked)
     }
     if (this.length < 15) {
-        editText.setTextColor(editText.resources.getColor(R.color.red))
+        setTextColor(editText, R.color.red)
     } else {
-        editText.setTextColor(editText.resources.getColor(R.color.green))
+        setTextColor(editText, R.color.black)
     }
 
     editText.setSelection(editText.length())
@@ -85,13 +81,13 @@ fun String.nameMask (editText: AutoCompleteTextView) {
     if (this.length < 3) {
         editText.setTextColor(editText.resources.getColor(R.color.red))
     } else {
-        editText.setTextColor(editText.resources.getColor(R.color.green))
+        editText.setTextColor(editText.resources.getColor(R.color.black))
     }
 }
 
 fun String.emailMask (editText: EditText) {
     if (this.length > 5 && !this.hasUpperCase()) {
-        editText.setTextColor(editText.resources.getColor(R.color.green))
+        editText.setTextColor(editText.resources.getColor(R.color.black))
     } else {
         editText.setTextColor(editText.resources.getColor(R.color.red))
     }
@@ -107,15 +103,19 @@ val String.checkRequirements get() = requirements.all { check -> check(this) }
 
 fun String.passwordMask (editText: TextInputEditText) {
     if (this.checkRequirements) {
-        editText.setTextColor(editText.resources.getColor(R.color.green))
+        setTextColor(editText, R.color.black)
     } else {
-        editText.setTextColor(editText.resources.getColor(R.color.red))
+        setTextColor(editText, R.color.red)
     }
+}
+
+private fun setTextColor(textInputEditText: TextInputEditText, color: Int) {
+    textInputEditText.setTextColor(textInputEditText.resources.getColor(color))
 }
 
 fun String.notEmptyMask (editText: TextInputEditText) {
     if (this.isNotEmpty()) {
-        editText.setTextColor(editText.resources.getColor(R.color.green))
+        editText.setTextColor(editText.resources.getColor(R.color.black))
     }
 
 }

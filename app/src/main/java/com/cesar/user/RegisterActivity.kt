@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isNotEmpty
 import androidx.core.widget.addTextChangedListener
+import com.cesar.user.databinding.RegisterBinding
 import com.cesar.user.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
@@ -32,20 +33,9 @@ private const val REQUEST_CODE_CAMERA = 1002
 
 class RegisterActivity : AppCompatActivity() {
 
-    lateinit var img: ImageView
-    lateinit var email: EditText
-    lateinit var password: TextInputEditText
-    lateinit var birth: TextInputEditText
-    lateinit var gender: TextInputEditText
-    lateinit var maritalState: Spinner
-    lateinit var cpf: TextInputEditText
-    lateinit var phone: TextInputEditText
-    lateinit var name: AutoCompleteTextView
-    lateinit var availableHour: TextInputEditText
-    lateinit var saveBtn: Button
-    lateinit var treatment: TextInputEditText
-    private lateinit var bottomSheet: TextInputEditText
+    private val binding by lazy { RegisterBinding.inflate(layoutInflater) }
 
+    private lateinit var bottomSheet: TextInputEditText
     private lateinit var photoExtra: File
     private lateinit var nameExtra: String
     private lateinit var emailExtra: String
@@ -65,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
     private var maritalStateAux = ""
     private var maritalStateAuxIndice = 0
     private var treatmentAux = ""
-    private var finished = 0
     private var formatDate = SimpleDateFormat("dd/MM/y", Locale.US)
 
     private val genderList = arrayOf("Masculino", "Feminino", "Outros")
@@ -73,58 +62,75 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.register)
-        setComponentBinding()
+        setContentView(binding.root)
+        setBottomSheetBinding()
         showGenderListDialog()
         showChooseImageMethod()
         setMasks()
         maritalStateAdapter()
         setDatePickerDialog()
         setTimePickerDialog()
-        setGetStringExtra()
+        getStringExtra()
         setUpdate()
         setSaveBtn()
         setNameSuggestionsAdapter()
+        setSetBtnValidation()
+        setTreatmentBottomSheet()
+    }
 
+    // When the user clicks at the treatment input, open the bottom sheet with the options
+    private fun setTreatmentBottomSheet() {
         bottomSheet.setOnClickListener {
-            treatment.setText("")
-            val bottomSheetDialog = BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_Light_BottomSheetDialog)
-            val bottomSheetView = LayoutInflater.from(applicationContext).inflate(
-                R.layout.bottomsheet_treatment,
-                findViewById<LinearLayout>(R.id.bottomsheet)
-            )
-
-            val radiogroup = bottomSheetView.findViewById<RadioGroup>(R.id.radiogroup)
-
+            binding.registerTreatment.setText("")
+            val bottomSheetDialog = setBottomSheetDialog()
+            val bottomSheetView = setBottomSheetView()
             bottomSheetDialog.setContentView(bottomSheetView)
             bottomSheetDialog.show()
-
+            val radiogroup = bottomSheetView.findViewById<RadioGroup>(R.id.radiogroup)
             radiogroup.setOnCheckedChangeListener { _, _ ->
-                treatmentAux = radiogroup.findViewById<RadioButton>(radiogroup.checkedRadioButtonId).text.toString()
-                treatment.setText(treatmentAux)
-                bottomSheetDialog.dismiss()
+                chekedRadioButtonHandler(radiogroup, bottomSheetDialog)
             }
 
         }
-
     }
 
+    private fun chekedRadioButtonHandler(radiogroup: RadioGroup, bottomSheetDialog: BottomSheetDialog) {
+        treatmentAux = radiogroup.findViewById<RadioButton>(radiogroup.checkedRadioButtonId).text.toString()
+        binding.registerTreatment.setText(treatmentAux)
+        bottomSheetDialog.dismiss()
+    }
+
+    private fun setBottomSheetView() = LayoutInflater.from(applicationContext).inflate(
+        R.layout.bottomsheet_treatment,
+        findViewById<LinearLayout>(R.id.bottomsheet)
+    )
+
+    private fun setBottomSheetDialog() = BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_Light_BottomSheetDialog)
+
+    // When the user cliks on save btn, save the inputs in shared preferences and navigate to home
     private fun setSaveBtn() {
-        saveBtn.setOnClickListener {
-            sharedPreferences()
-            val intent = Intent(this, MenuHamburguerActivity::class.java)
-            startActivity(intent)
+        binding.registerSave.setOnClickListener {
+            saveOnSharedPreferences()
+            navigationToHome()
             finish()
         }
     }
 
+    // Navigate to home
+    private fun navigationToHome() {
+        val intent = Intent(this, DashboardActivity::class.java)
+        startActivity(intent)
+    }
+
+    // Set the name suggestions adapter to auto fill input with the list name
     private fun setNameSuggestionsAdapter() {
         val names = resources.getStringArray(R.array.Nomes)
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, names)
-        name.setAdapter(adapter)
+        binding.registerName.setAdapter(adapter)
     }
 
-    private fun setGetStringExtra() {
+    // Get the user values from shared preferences
+    private fun getStringExtra() {
         photoExtra = File(filesDir, "foto.jpg")
         nameExtra = intent?.getStringExtra("name").toString()
         emailExtra = intent?.getStringExtra("email").toString()
@@ -150,35 +156,34 @@ class RegisterActivity : AppCompatActivity() {
         )
     }
 
+    // If the user clicked on update, fill the inputs with their values
     private fun setUpdate() {
         if (listExtra[0] != "null") {
-            img.setImageDrawable(Drawable.createFromPath(photoExtra.toString()))
-            name.setText(nameExtra)
-            email.setText(emailExtra)
-            password.setText(passwordExtra)
-            birth.setText(birthExtra)
-            gender.setText(genderExtra)
-            // MARITAL STATE
-            cpf.setText(cpfExtra)
-            phone.setText(phoneExtra)
-            availableHour.setText(availableHourExtra)
-//            maritalStateList[0] = maritalStateExtra
-//            maritalStateList[maritalStateIndiceExtra.toInt()] = "Estado civil"
-            maritalState.setSelection(maritalStateIndiceExtra.toInt())
-            treatment.setText(treatmentExtra)
+            binding.registerImg.setImageDrawable(Drawable.createFromPath(photoExtra.toString()))
+            binding.registerName.setText(nameExtra)
+            binding.registerEmail.setText(emailExtra)
+            binding.registerPassword.setText(passwordExtra)
+            binding.registerBirth.setText(birthExtra)
+            binding.registerGender.setText(genderExtra)
+            binding.registerCpf.setText(cpfExtra)
+            binding.registerPhone.setText(phoneExtra)
+            binding.registerAvailableHour.setText(availableHourExtra)
+            binding.registerMaritalState.setSelection(maritalStateIndiceExtra.toInt())
+            binding.registerTreatment.setText(treatmentExtra)
         }
     }
 
+    // Set TimePickerDialog to capture user available hour
     private fun setTimePickerDialog() {
-        availableHour.setOnClickListener {
+        binding.registerAvailableHour.setOnClickListener {
             val getTime = Calendar.getInstance()
             val timePicker = TimePickerDialog(
                 this,
                 android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                 { _: TimePicker, hour: Int, minute: Int ->
-                    val minuteFormatted: String = if (minute < 10) "0${minute}" else minute.toString()
-                    val hourFormatted: String = if (hour < 10) "0${hour}" else hour.toString()
-                    availableHour.setText("$hourFormatted:$minuteFormatted")
+                    val minuteFormatted: String = oneDigitTimeHandler(minute)
+                    val hourFormatted: String = oneDigitTimeHandler(hour)
+                    binding.registerAvailableHour.setText("$hourFormatted:$minuteFormatted")
                 },
                 getTime.get(Calendar.HOUR),
                 getTime.get(Calendar.MINUTE),
@@ -188,9 +193,13 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    // Handle with one digit number for example 1:15 to 01:15 or 10:5 to 10:50
+    private fun oneDigitTimeHandler(minute: Int) =
+        if (minute < 10) "0${minute}" else minute.toString()
+
     // Set DatePickerDialog to capture user birth
     private fun setDatePickerDialog() {
-        birth.setOnClickListener {
+        binding.registerBirth.setOnClickListener {
             val getDate = Calendar.getInstance()
             val datepicker = DatePickerDialog(
                 this,
@@ -202,7 +211,7 @@ class RegisterActivity : AppCompatActivity() {
                     selectDate.set(Calendar.MONTH, month)
                     selectDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                    birth.setText(formatDate.format(selectDate.time))
+                    binding.registerBirth.setText(formatDate.format(selectDate.time))
 
                 },
                 getDate.get(Calendar.YEAR),
@@ -213,28 +222,28 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun sharedPreferences() {
+    // Save the inputs in the phone shared preferences
+    private fun saveOnSharedPreferences() {
         val sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE)
-        sharedPref.edit().putString("name", name.text.toString()).apply()
-        sharedPref.edit().putString("email", email.text.toString()).apply()
-        sharedPref.edit().putString("password", password.text.toString()).apply()
-        sharedPref.edit().putString("birth", birth.text.toString()).apply()
-        sharedPref.edit().putString("gender", gender.text.toString()).apply()
+        sharedPref.edit().putString("name", binding.registerName.text.toString()).apply()
+        sharedPref.edit().putString("email", binding.registerEmail.text.toString()).apply()
+        sharedPref.edit().putString("password", binding.registerPassword.text.toString()).apply()
+        sharedPref.edit().putString("birth", binding.registerBirth.text.toString()).apply()
+        sharedPref.edit().putString("gender", binding.registerGender.text.toString()).apply()
         sharedPref.edit().putString("maritalState", maritalStateAux).apply()
         sharedPref.edit().putString("maritalStateIndice", maritalStateAuxIndice.toString()).apply()
-        sharedPref.edit().putString("cpf", cpf.text.toString()).apply()
-        sharedPref.edit().putString("phone", phone.text.toString()).apply()
-        sharedPref.edit().putString("availableHour", availableHour.text.toString()).apply()
+        sharedPref.edit().putString("cpf", binding.registerCpf.text.toString()).apply()
+        sharedPref.edit().putString("phone", binding.registerPhone.text.toString()).apply()
+        sharedPref.edit().putString("availableHour", binding.registerAvailableHour.text.toString()).apply()
         sharedPref.edit().putString("treatment", treatmentAux).apply()
     }
 
     // Create adapter for spinner dropdown with an option list
     private fun maritalStateAdapter() {
-        val arrayAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, maritalStateList)
-        maritalState.adapter = arrayAdapter
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, maritalStateList)
+        binding.registerMaritalState.adapter = arrayAdapter
 
-        maritalState.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.registerMaritalState.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -243,7 +252,7 @@ class RegisterActivity : AppCompatActivity() {
             ) {
                 val text: TextView = parent?.getChildAt(0) as TextView
                 if (text.text != "Estado civil") {
-                    text.setTextColor(text.resources.getColor(R.color.green))
+                    text.setTextColor(text.resources.getColor(R.color.black))
                 }
                 maritalStateAux = maritalStateList[position]
                 maritalStateAuxIndice = position
@@ -257,39 +266,35 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // Set binding according with the view
-    private fun setComponentBinding() {
-        img = findViewById(R.id.register_img)
-        birth = findViewById(R.id.register_birth)
-        gender = findViewById(R.id.register_gender)
-        maritalState = findViewById(R.id.register_marital_status)
-        email = findViewById(R.id.register_email)
-        password = findViewById(R.id.register_password)
-        cpf = findViewById(R.id.register_cpf)
-        phone = findViewById(R.id.register_phone)
-        name = findViewById(R.id.register_name)
-        availableHour = findViewById(R.id.register_available_hour)
-        saveBtn = findViewById(R.id.register_save)
+    private fun setBottomSheetBinding() {
         bottomSheet = findViewById(R.id.register_treatment)
-        treatment = findViewById(R.id.register_treatment)
     }
 
     // Open the camera
     fun openCapturePhotoForImage() {
-        img.setOnClickListener {
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA)
+        binding.registerImg.setOnClickListener {
+            openTheCamera()
         }
 
     }
 
+    private fun openTheCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA)
+    }
+
     // Open the gallery
     private fun openGalleryForImage() {
-        img.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_CODE_GALLERY)
+        binding.registerImg.setOnClickListener {
+            openTheGallery()
         }
 
+    }
+
+    private fun openTheGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_CODE_GALLERY)
     }
 
     // Check the requests and set the images
@@ -299,7 +304,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
             if (intent?.data != null) {
-                img.setImageURI(intent.data) // handle chosen image
+                binding.registerImg.setImageURI(intent.data) // handle chosen image
 
                 val imageUri: Uri = intent.data!!
                 val source = ImageDecoder.createSource(contentResolver, imageUri)
@@ -312,7 +317,7 @@ class RegisterActivity : AppCompatActivity() {
         }
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CAMERA && intent != null){
             if (intent.data != null) {
-                img.setImageBitmap(intent.extras?.get("data") as Bitmap)
+                binding.registerImg.setImageBitmap(intent.extras?.get("data") as Bitmap)
 
             }
         }
@@ -320,13 +325,13 @@ class RegisterActivity : AppCompatActivity() {
 
     // Open a gender list option dialog
     private fun showGenderListDialog() {
-        gender.setOnClickListener {
+        binding.registerGender.setOnClickListener {
             val builder = AlertDialog.Builder(this)
 
             builder.setTitle("Escolha seu gênero:")
             builder.setItems(genderList) { dialog, which ->
                 Toast.makeText(applicationContext, genderList[which], Toast.LENGTH_SHORT).show()
-                gender.setText(genderList[which])
+                binding.registerGender.setText(genderList[which])
             }
 
             val dialog = builder.create()
@@ -336,7 +341,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // Open an option dialog -> GALLERY or CAMERA
     private fun showChooseImageMethod() {
-        img.setOnClickListener {
+        binding.registerImg.setOnClickListener {
             val builder = AlertDialog.Builder(this)
 
             builder.setTitle("Foto de perfil")
@@ -354,70 +359,63 @@ class RegisterActivity : AppCompatActivity() {
 
     // Set the masks for validations, formatting and visual
     private fun setMasks() {
-        name.addTextChangedListener {
-            it.toString().nameMask(name)
+        binding.registerName.addTextChangedListener {
+            it.toString().nameMask(binding.registerName)
             setSetBtnValidation()
         }
 
-        email.addTextChangedListener {
-            it.toString().emailMask(email)
+        binding.registerEmail.addTextChangedListener {
+            it.toString().emailMask(binding.registerEmail)
             setSetBtnValidation()
         }
 
-        password.addTextChangedListener {
-            it.toString().passwordMask(password)
+        binding.registerPassword.addTextChangedListener {
+            it.toString().passwordMask(binding.registerPassword)
             setSetBtnValidation()
         }
 
-        birth.addTextChangedListener {
-            it.toString().notEmptyMask(birth)
+        binding.registerBirth.addTextChangedListener {
+            it.toString().notEmptyMask(binding.registerBirth)
             setSetBtnValidation()
         }
 
-        gender.addTextChangedListener {
-            it.toString().notEmptyMask(gender)
+        binding.registerGender.addTextChangedListener {
+            it.toString().notEmptyMask(binding.registerGender)
             setSetBtnValidation()
         }
 
-        cpf.addTextChangedListener {
-            cpfAux = it.toString().cpfMask(cpfAux, cpf)
+        binding.registerCpf.addTextChangedListener {
+            cpfAux = it.toString().cpfMask(cpfAux, binding.registerCpf)
             setSetBtnValidation()
         }
 
-        phone.addTextChangedListener {
-            phoneAux = it.toString().phoneMask(phoneAux, phone)
+        binding.registerPhone.addTextChangedListener {
+            phoneAux = it.toString().phoneMask(phoneAux, binding.registerPhone)
             setSetBtnValidation()
         }
 
-        availableHour.addTextChangedListener {
-            it.toString().notEmptyMask(availableHour)
+        binding.registerAvailableHour.addTextChangedListener {
+            it.toString().notEmptyMask(binding.registerAvailableHour)
             setSetBtnValidation()
         }
 
-        treatment.addTextChangedListener {
-            it.toString().notEmptyMask(treatment)
+        binding.registerTreatment.addTextChangedListener {
+            it.toString().notEmptyMask(binding.registerTreatment)
             setSetBtnValidation()
         }
 
     }
 
+    // Change clickable and color state if the inputs are filled
     private fun setSetBtnValidation() {
-        if (name.text.length > 3 && email.text.length > 5 && !email.text.any(Char::isUpperCase) && password.text.toString().checkRequirements && birth.text.toString().isNotEmpty() && gender.text.toString().isNotEmpty() && maritalState.isNotEmpty() && cpf.text.toString().length == 14 && phone.text.toString().length == 15 && availableHour.text.toString().isNotEmpty()) {
-            saveBtn.backgroundTintList = getColorStateList(R.color.purple_500)
-            saveBtn.setTextColor(saveBtn.resources.getColor(R.color.white))
-            saveBtn.isClickable = true
+        if (binding.registerName.text.length > 3 && binding.registerEmail.text.length > 5 && !binding.registerEmail.text.any(Char::isUpperCase) && binding.registerPassword.text.toString().checkRequirements && binding.registerBirth.text.toString().isNotEmpty() && binding.registerGender.text.toString().isNotEmpty() && binding.registerMaritalState.isNotEmpty() && binding.registerCpf.text.toString().length == 14 && binding.registerPhone.text.toString().length == 15 && binding.registerAvailableHour.text.toString().isNotEmpty() && binding.registerTreatment.text.toString().isNotEmpty()) {
+            binding.registerSave.backgroundTintList = getColorStateList(R.color.black)
+            binding.registerSave.setTextColor(binding.registerSave.resources.getColor(R.color.green_200))
+            binding.registerSave.isClickable = true
         } else {
-            saveBtn.backgroundTintList = getColorStateList(R.color.white)
-            saveBtn.setTextColor(saveBtn.resources.getColor(R.color.black))
-            saveBtn.isClickable = false
+            binding.registerSave.backgroundTintList = getColorStateList(R.color.white)
+            binding.registerSave.setTextColor(binding.registerSave.resources.getColor(R.color.black))
+            binding.registerSave.isClickable = false
         }
     }
-
-    //APLICAR NO OLHINHO
-//    override fun onTouchEvent(event: MotionEvent?): Boolean {
-//        return super.onTouchEvent(event)
-//
-//        if (onKeyDown())
-//    }
-
 }

@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
         if (isLoginValid()) {
             rememberLogin()
-            nagivationToHome()
+            navigationToHome()
         }
     }
 
@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
         return false
     }
 
-    private fun nagivationToHome() {
+    private fun navigationToHome() {
         val intent = Intent(this, DashboardActivity::class.java)
         Toast.makeText(applicationContext, "Login efetuado com sucesso!", Toast.LENGTH_SHORT).show()
         startActivity(intent)
